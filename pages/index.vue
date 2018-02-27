@@ -10,15 +10,17 @@
         :key="`l${line.idx}`"
         :d="getPath(line, i)"
         fill="none"
-        :stroke="line.color"
-        stroke-width="5"
+        :stroke="i, lines.length | color"
+        stroke-width="10"
       />
       <circle
         v-for="station in stations"
         :key="station.idx"
-        :cx="station.x * width"
-        :cy="station.y * height"
-        :fill="station.color"
+        :cx="station.x"
+        :cy="station.y"
+        fill="hsl(0, 0%, 100%)"
+        stroke="hsl(0, 0%, 0%)"
+        stroke-width="5"
         r="16"
       />
     </svg>
@@ -43,7 +45,29 @@ const arrayPick = (array, num) => {
   return ret
 }
 
+class Point {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+  }
+  toString() {
+    return `${this.x},${this.y}`
+  }
+  add(point) {
+    return new Point(this.x + point.x, this.y + point.y)
+  }
+  subtract(point) {
+    return new Point(this.x - point.x, this.y - point.y)
+  }
+}
+const sign = num => (num === 0 ? 0 : num > 0 ? 1 : -1)
+
 export default {
+  filters: {
+    color(i, length) {
+      return `hsl(${i / length * 360}, 60%, 50%)`
+    }
+  },
   data() {
     return {
       stations: [],
@@ -56,8 +80,8 @@ export default {
     this.stations = [...Array(10).keys()].map(i => ({
       idx: i,
       color: randomColor(),
-      x: Math.random(),
-      y: Math.random()
+      x: Math.random() * this.width,
+      y: Math.random() * this.height
     }))
 
     this.lines = [...Array(5).keys()].map(i => ({
@@ -65,22 +89,34 @@ export default {
       color: randomColor(),
       stations: arrayPick(
         this.stations,
-        randomRange(2, this.stations.length * 0.5)
+        randomRange(2, this.stations.length * 0.3)
       ).map(s => s.idx)
     }))
   },
   methods: {
-    getPos(pt, diff) {
-      return `${pt.x * this.width},${pt.y * this.height + diff * 2}`
-    },
     getPath(line, i) {
-      let posList = line.stations.map(idx => this.stations[idx])
-      const start = posList.shift()
-      const list = posList.reduce(
-        (prev, curr) => `${prev} ${this.getPos(curr, i)}`,
+      let stList = line.stations.map(
+        idx => new Point(this.stations[idx].x, this.stations[idx].y)
+      )
+
+      let lineList = []
+      stList.forEach((pos, i) => {
+        lineList.push(pos)
+        if (i >= stList.length - 1) return
+
+        const diff = stList[i + 1].subtract(pos)
+        const min = Math.min(Math.abs(diff.x), Math.abs(diff.y))
+        lineList.push(
+          pos.add(new Point(min * sign(diff.x), min * sign(diff.y)))
+        )
+      })
+
+      const start = lineList.shift()
+      const listString = lineList.reduce(
+        (prev, curr) => `${prev} ${curr.toString()}`,
         ''
       )
-      return `M ${this.getPos(start, i)} L ${list}`
+      return `M ${start.toString()} L ${listString}`
     }
   }
 }
