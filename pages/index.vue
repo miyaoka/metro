@@ -61,6 +61,7 @@ class Point {
   }
 }
 const sign = num => (num === 0 ? 0 : num > 0 ? 1 : -1)
+const lineOffset = 5
 
 export default {
   filters: {
@@ -81,7 +82,8 @@ export default {
       idx: i,
       color: randomColor(),
       x: Math.random() * this.width,
-      y: Math.random() * this.height
+      y: Math.random() * this.height,
+      lines: []
     }))
 
     this.lines = [...Array(5).keys()].map(i => ({
@@ -92,12 +94,18 @@ export default {
         randomRange(2, this.stations.length * 0.3)
       ).map(s => s.idx)
     }))
+
+    this.lines.forEach(l => {
+      l.stations.forEach(s => this.stations[s].lines.push(l.idx))
+    })
   },
   methods: {
     getPath(line, i) {
-      let stList = line.stations.map(
-        idx => new Point(this.stations[idx].x, this.stations[idx].y)
-      )
+      let stList = line.stations.map(idx => {
+        const st = this.stations[idx]
+        const offset = st.lines.findIndex(val => val === i) * lineOffset
+        return new Point(st.x + offset, st.y + offset)
+      })
 
       let lineList = []
       stList.forEach((pos, i) => {
