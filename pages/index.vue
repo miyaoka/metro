@@ -6,9 +6,9 @@
       class="map"
     >
       <MetroLine
-        v-for="(line, i) in lines"
-        :color="i, lines.length | color"
+        v-for="line in lines"
         :key="line.idx"
+        :color="line.color"
         :line="line"
       />
       <MetroStation
@@ -47,11 +47,6 @@ export default {
     MetroLine,
     MetroStation
   },
-  filters: {
-    color(i, length) {
-      return `hsl(${i / length * 360}, 60%, 50%)`
-    }
-  },
   data() {
     return {
       width: 800,
@@ -73,7 +68,8 @@ export default {
       idx: uuid(),
       stations: arrayPick(stations, randomRange(2, stations.length * 0.5)).map(
         s => s.idx
-      )
+      ),
+      color: `hsl(${i / lineCount * 360}, 60%, 50%)`
     }))
 
     this.$store.commit('setStations', stations)
