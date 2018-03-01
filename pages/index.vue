@@ -24,6 +24,7 @@
 <script>
 import MetroLine from '~/components/MetroLine.vue'
 import MetroStation from '~/components/MetroStation.vue'
+import { mapState } from 'vuex'
 
 const randomRange = (min, max) =>
   Math.floor(Math.random() * (max - min + 1)) + min
@@ -72,14 +73,12 @@ export default {
   },
   data() {
     return {
-      stations: [],
-      lines: [],
       width: 800,
       height: 600
     }
   },
   created() {
-    this.stations = [...Array(10).keys()].map(i => ({
+    const stations = [...Array(10).keys()].map(i => ({
       idx: i,
       color: randomColor(),
       x: Math.random() * this.width,
@@ -87,18 +86,23 @@ export default {
       lines: []
     }))
 
-    this.lines = [...Array(3).keys()].map(i => ({
+    const lines = [...Array(3).keys()].map(i => ({
       idx: i,
       color: randomColor(),
-      stations: arrayPick(
-        this.stations,
-        randomRange(2, this.stations.length * 0.3)
-      ).map(s => s.idx)
+      stations: arrayPick(stations, randomRange(2, stations.length * 0.3)).map(
+        s => s.idx
+      )
     }))
 
-    this.lines.forEach(l => {
-      l.stations.forEach(s => this.stations[s].lines.push(l.idx))
+    lines.forEach(l => {
+      l.stations.forEach(s => stations[s].lines.push(l.idx))
     })
+
+    this.$store.commit('setStations', stations)
+    this.$store.commit('setLines', lines)
+  },
+  computed: {
+    ...mapState(['stations', 'lines'])
   },
   methods: {
     getPath(line, i) {
