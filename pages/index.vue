@@ -53,7 +53,7 @@ export default {
       height: 600
     }
   },
-  created() {
+  mounted() {
     const stationCount = 10
     const lineCount = 3
 
