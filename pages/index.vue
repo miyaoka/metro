@@ -7,8 +7,8 @@
     >
       <MetroLine
         v-for="(line, i) in lines"
-        :key="`l${line.idx}`"
         :color="i, lines.length | color"
+        :key="line.idx"
         :line="line"
       />
       <MetroStation
@@ -21,9 +21,10 @@
 </template>
 
 <script>
+import uuid from 'uuid'
+import { mapState, mapGetters } from 'vuex'
 import MetroLine from '~/components/MetroLine.vue'
 import MetroStation from '~/components/MetroStation.vue'
-import { mapState, mapGetters } from 'vuex'
 
 const randomRange = (min, max) =>
   Math.floor(Math.random() * (max - min + 1)) + min
@@ -58,23 +59,22 @@ export default {
     }
   },
   created() {
-    const stations = [...Array(10).keys()].map(i => ({
-      idx: i,
+    const stationCount = 10
+    const lineCount = 3
+
+    const stations = [...Array(stationCount).keys()].map(i => ({
+      idx: uuid(),
       x: Math.random() * this.width,
       y: Math.random() * this.height,
       lines: []
     }))
 
-    const lines = [...Array(3).keys()].map(i => ({
-      idx: i,
-      stations: arrayPick(stations, randomRange(2, stations.length * 0.3)).map(
+    const lines = [...Array(lineCount).keys()].map(i => ({
+      idx: uuid(),
+      stations: arrayPick(stations, randomRange(2, stations.length * 0.5)).map(
         s => s.idx
       )
     }))
-
-    lines.forEach(l => {
-      l.stations.forEach(s => stations[s].lines.push(l.idx))
-    })
 
     this.$store.commit('setStations', stations)
     this.$store.commit('setLines', lines)

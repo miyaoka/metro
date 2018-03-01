@@ -40,8 +40,8 @@ export default {
     path() {
       let stList = this.line.stations.map(idx => {
         const st = this.getStation(idx)
-        const offset =
-          st.lines.findIndex(val => val === this.line.idx) * lineOffset
+        const offset = 0
+        //          st.lines.findIndex(val => val === this.line.idx) * lineOffset
         return new Point(st.x + offset, st.y + offset)
       })
 
