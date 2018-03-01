@@ -5,29 +5,26 @@
       :height="height"
       class="map"
     >
-      <path
+      <MetroLine
         v-for="(line, i) in lines"
         :key="`l${line.idx}`"
-        :d="getPath(line, i)"
-        fill="none"
-        :stroke="i, lines.length | color"
-        stroke-width="10"
+        :path="getPath(line, i)"
+        :color="i, lines.length | color"
       />
-      <circle
+      <MetroStation
         v-for="station in stations"
         :key="station.idx"
-        :cx="station.x"
-        :cy="station.y"
-        fill="hsl(0, 0%, 100%)"
-        stroke="hsl(0, 0%, 0%)"
-        stroke-width="5"
-        r="16"
+        :x="station.x"
+        :y="station.y"
       />
     </svg>
   </div>
 </template>
 
 <script>
+import MetroLine from '~/components/MetroLine.vue'
+import MetroStation from '~/components/MetroStation.vue'
+
 const randomRange = (min, max) =>
   Math.floor(Math.random() * (max - min + 1)) + min
 const randomColor = () => `hsl(${Math.random() * 360}, 60%, 50%)`
@@ -64,6 +61,10 @@ const sign = num => (num === 0 ? 0 : num > 0 ? 1 : -1)
 const lineOffset = 5
 
 export default {
+  components: {
+    MetroLine,
+    MetroStation
+  },
   filters: {
     color(i, length) {
       return `hsl(${i / length * 360}, 60%, 50%)`
@@ -86,7 +87,7 @@ export default {
       lines: []
     }))
 
-    this.lines = [...Array(5).keys()].map(i => ({
+    this.lines = [...Array(3).keys()].map(i => ({
       idx: i,
       color: randomColor(),
       stations: arrayPick(
