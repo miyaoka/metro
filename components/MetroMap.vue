@@ -52,17 +52,17 @@ export default {
     const stationCount = 10
     const lineCount = 3
 
-    const stations = [...Array(stationCount).keys()].map(i => ({
+    const stations = [...Array(stationCount).keys()].map((i) => ({
       id: shortid.generate(),
       x: Math.random() * this.width,
       y: Math.random() * this.height,
       lines: []
     }))
 
-    const lines = [...Array(lineCount).keys()].map(i => ({
+    const lines = [...Array(lineCount).keys()].map((i) => ({
       id: shortid.generate(),
       stations: arrayPick(stations, randomRange(2, stations.length * 0.5)).map(
-        s => s.id
+        (s) => s.id
       ),
       color: `hsl(${i / lineCount * 360}, 60%, 50%)`
     }))

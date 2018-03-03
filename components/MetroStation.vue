@@ -22,9 +22,9 @@ export default {
     ...mapMutations(['setStation']),
     updatePos(x, y) {
       this.setStation({
-          ...this.station,
-          x,
-          y
+        ...this.station,
+        x,
+        y
       })
     },
     onMouseDown(e) {

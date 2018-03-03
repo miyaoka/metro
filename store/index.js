@@ -4,8 +4,8 @@ export const state = () => ({
 })
 
 export const getters = {
-  getStation: state => id => state.stations[id],
-  getLine: state => id => state.lines[id]
+  getStation: (state) => (id) => state.stations[id],
+  getLine: (state) => (id) => state.lines[id]
 }
 
 export const mutations = {

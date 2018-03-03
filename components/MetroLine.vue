@@ -31,7 +31,7 @@ class Point {
   }
 }
 
-const sign = num => (num === 0 ? 0 : num > 0 ? 1 : -1)
+const sign = (num) => (num === 0 ? 0 : num > 0 ? 1 : -1)
 const lineOffset = 5
 
 export default {
@@ -43,7 +43,7 @@ export default {
     ...mapGetters(['getStation']),
 
     pathList() {
-      let stList = this.line.stations.map(id => {
+      let stList = this.line.stations.map((id) => {
         const st = this.getStation(id)
         const offset = 0
         //          st.lines.findIndex(val => val === this.line.id) * lineOffset
@@ -63,7 +63,7 @@ export default {
         ])
       })
 
-      return pathNodeList.map(nodes => {
+      return pathNodeList.map((nodes) => {
         const moveto = nodes.shift().toString()
         const lineto = nodes.reduce(
           (prev, curr) => `${prev} ${curr.toString()}`
