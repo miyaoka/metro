@@ -1,10 +1,15 @@
 <template>
-  <path
-    :d="path"
+  <g
     :stroke="color"
     fill="none"
     stroke-width="10"
-  />
+  >
+    <path
+      v-for="(path, i) in pathList"
+      :key="i"
+      :d="path"
+    />
+  </g>
 </template>
 
 <script>
@@ -37,7 +42,7 @@ export default {
   computed: {
     ...mapGetters(['getStation']),
 
-    path() {
+    pathList() {
       let stList = this.line.stations.map(idx => {
         const st = this.getStation(idx)
         const offset = 0
@@ -45,24 +50,26 @@ export default {
         return new Point(st.x + offset, st.y + offset)
       })
 
-      let lineList = []
-      stList.forEach((pos, i) => {
-        lineList.push(pos)
-        if (i >= stList.length - 1) return
+      let pathNodeList = []
 
-        const diff = stList[i + 1].subtract(pos)
+      stList.slice(0, -1).forEach((currSt, i) => {
+        const nextSt = stList[i + 1]
+        const diff = nextSt.subtract(currSt)
         const min = Math.min(Math.abs(diff.x), Math.abs(diff.y))
-        lineList.push(
-          pos.add(new Point(min * sign(diff.x), min * sign(diff.y)))
-        )
+        pathNodeList.push([
+          currSt,
+          currSt.add(new Point(min * sign(diff.x), min * sign(diff.y))),
+          nextSt
+        ])
       })
 
-      const start = lineList.shift()
-      const listString = lineList.reduce(
-        (prev, curr) => `${prev} ${curr.toString()}`,
-        ''
-      )
-      return `M ${start.toString()} L ${listString}`
+      return pathNodeList.map(nodes => {
+        const moveto = nodes.shift().toString()
+        const lineto = nodes.reduce(
+          (prev, curr) => `${prev} ${curr.toString()}`
+        )
+        return `M${moveto} L${lineto}`
+      })
     }
   }
 }
