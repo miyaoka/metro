@@ -21,11 +21,11 @@ export const mutations = {
       {}
     )
   },
-  setStation(state, { id, station }) {
-    state.stations[id] = station
+  setStation(state, station) {
+    state.stations[station.id] = station
   },
-  setLine(state, { id, line }) {
-    state.lines[id] = line
+  setLine(state, line) {
+    state.lines[line.id] = line
   }
 }
 
