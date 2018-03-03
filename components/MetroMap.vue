@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import uuid from 'uuid'
+import shortid from 'shortid'
 import { mapState, mapGetters } from 'vuex'
 import MetroLine from '~/components/MetroLine.vue'
 import MetroStation from '~/components/MetroStation.vue'
@@ -53,14 +53,14 @@ export default {
     const lineCount = 3
 
     const stations = [...Array(stationCount).keys()].map(i => ({
-      idx: uuid(),
+      idx: shortid.generate(),
       x: Math.random() * this.width,
       y: Math.random() * this.height,
       lines: []
     }))
 
     const lines = [...Array(lineCount).keys()].map(i => ({
-      idx: uuid(),
+      idx: shortid.generate(),
       stations: arrayPick(stations, randomRange(2, stations.length * 0.5)).map(
         s => s.idx
       ),
