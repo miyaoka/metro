@@ -4,28 +4,28 @@ export const state = () => ({
 })
 
 export const getters = {
-  getStation: state => idx => state.stations[idx],
-  getLine: state => idx => state.lines[idx]
+  getStation: state => id => state.stations[id],
+  getLine: state => id => state.lines[id]
 }
 
 export const mutations = {
   setStations(state, stations) {
     state.stations = stations.reduce(
-      (prev, curr) => ({ ...prev, [curr.idx]: curr }),
+      (prev, curr) => ({ ...prev, [curr.id]: curr }),
       {}
     )
   },
   setLines(state, lines) {
     state.lines = lines.reduce(
-      (prev, curr) => ({ ...prev, [curr.idx]: curr }),
+      (prev, curr) => ({ ...prev, [curr.id]: curr }),
       {}
     )
   },
-  setStation(state, { idx, station }) {
-    state.stations[idx] = station
+  setStation(state, { id, station }) {
+    state.stations[id] = station
   },
-  setLine(state, { idx, line }) {
-    state.lines[idx] = line
+  setLine(state, { id, line }) {
+    state.lines[id] = line
   }
 }
 

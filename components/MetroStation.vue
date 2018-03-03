@@ -22,7 +22,7 @@ export default {
     ...mapMutations(['setStation']),
     updatePos(x, y) {
       this.setStation({
-        idx: this.station.idx,
+        id: this.station.id,
         station: {
           ...this.station,
           x,

@@ -20,9 +20,9 @@
           <tbody>
             <tr
               v-for="station in stations"
-              :key="station.idx"
+              :key="station.id"
             >
-              <th>{{station.idx.substring(0, 3)}}</th>
+              <th>{{station.id.substring(0, 3)}}</th>
               <td>{{station.x.toFixed(0)}}</td>
               <td>{{station.y.toFixed(0)}}</td>
             </tr>
@@ -41,9 +41,9 @@
           <tbody>
             <tr
               v-for="line in lines"
-              :key="line.idx"
+              :key="line.id"
             >
-              <th>{{line.idx.substring(0, 3)}}</th>
+              <th>{{line.id.substring(0, 3)}}</th>
               <td>{{line.stations.map(st => st.substring(0, 3)).join(' - ')}}</td>
             </tr>
           </tbody>

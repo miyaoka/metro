@@ -5,13 +5,13 @@
   >
     <MetroLine
       v-for="line in lines"
-      :key="line.idx"
+      :key="line.id"
       :color="line.color"
       :line="line"
     />
     <MetroStation
       v-for="station in stations"
-      :key="station.idx"
+      :key="station.id"
       :station="station"
     />
   </svg>
@@ -53,16 +53,16 @@ export default {
     const lineCount = 3
 
     const stations = [...Array(stationCount).keys()].map(i => ({
-      idx: shortid.generate(),
+      id: shortid.generate(),
       x: Math.random() * this.width,
       y: Math.random() * this.height,
       lines: []
     }))
 
     const lines = [...Array(lineCount).keys()].map(i => ({
-      idx: shortid.generate(),
+      id: shortid.generate(),
       stations: arrayPick(stations, randomRange(2, stations.length * 0.5)).map(
-        s => s.idx
+        s => s.id
       ),
       color: `hsl(${i / lineCount * 360}, 60%, 50%)`
     }))
