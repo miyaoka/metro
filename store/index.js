@@ -38,12 +38,18 @@ export const getters = {
     stList.slice(0, -1).forEach((currSt, i) => {
       const nextSt = stList[i + 1]
       const diff = nextSt.subtract(currSt)
-      const min = Math.min(Math.abs(diff.x), Math.abs(diff.y))
-      nodeList.push([
-        currSt,
-        currSt.add(new Point(min * sign(diff.x), min * sign(diff.y))),
-        nextSt
-      ])
+      const diffMin = Math.min(Math.abs(diff.x), Math.abs(diff.y))
+      nodeList.push(
+        diffMin === 0
+          ? [currSt, nextSt]
+          : [
+              currSt,
+              currSt.add(
+                new Point(diffMin * sign(diff.x), diffMin * sign(diff.y))
+              ),
+              nextSt
+            ]
+      )
     })
     return nodeList
   }
