@@ -9,6 +9,12 @@
       :color="line.color"
       :line="line"
     />
+    <MetroTrain
+      v-for="line in lines"
+      :key="`T-${line.id}`"
+      :lineId="line.id"
+      :color="line.color"
+    />
     <MetroStation
       v-for="station in stations"
       :key="station.id"
@@ -22,6 +28,7 @@ import shortid from 'shortid'
 import { mapState, mapGetters } from 'vuex'
 import MetroLine from '~/components/MetroLine.vue'
 import MetroStation from '~/components/MetroStation.vue'
+import MetroTrain from '~/components/MetroTrain.vue'
 
 const randomRange = (min, max) =>
   Math.floor(Math.random() * (max - min + 1)) + min
@@ -42,7 +49,8 @@ const arrayPick = (array, num) => {
 export default {
   components: {
     MetroLine,
-    MetroStation
+    MetroStation,
+    MetroTrain
   },
   props: {
     width: { type: Number },
@@ -61,7 +69,7 @@ export default {
 
     const lines = [...Array(lineCount).keys()].map((i) => ({
       id: shortid.generate(),
-      stations: arrayPick(stations, randomRange(2, stations.length * 0.5)).map(
+      stations: arrayPick(stations, randomRange(3, stations.length * 0.5)).map(
         (s) => s.id
       ),
       color: `hsl(${i / lineCount * 360}, 60%, 50%)`
