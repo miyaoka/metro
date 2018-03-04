@@ -1,6 +1,8 @@
 # metro
 
-> Nuxt.js project
+> SVG animation like Mini Metro
+
+![metro](https://user-images.githubusercontent.com/1443118/36941457-0249d310-1f9f-11e8-8940-fa52497994be.gif)
 
 ## Build Setup
 
